@@ -35,11 +35,16 @@ static const byte PERCENT_CHAR = 1;
 static byte percent_glyph[] = { 0x23, 0x13, 0x08, 0x64, 0x62 };
 #define SCREEN_LED 10
 //globals for screen lines. TODO, these can be 15 wide.
+//TODO:
+  //Do we need to stoor this globally?
+  //Can we describe each line in a smaller way? Hashing, or maybe update flags (bool)
 char lcdPage [6][16];
-//The book is what can be drawn
+//The currently displayed page
 uint8_t page = 0;
 
 //global variables
+//TODO:
+  //Do these have to be global? can we make them local and just write them out to sd?
 float hum;
 float temp_db;
 float temp_wb;
@@ -89,6 +94,7 @@ void get_light(){
 
 float calc_temp_wb(float db, float h){
   //Function for calculating Wet Bulb temperature from Dry Bulb and Relative Humidity
+  //move the constants into #define to reduce local mem
   const float A = 0.151977;
   const float B = 8.313659;
   const float C = 1.676331;
@@ -110,6 +116,9 @@ void ito2digitstr(char *to, int i){
 
 void get_str_datetime(){
 // returns the datetime string for L0
+//TODO:
+  //Look at moving this into the myRTC library
+  //convert in there straight into the correct format. save me and cpu
   time_t t = rtc.getDS1302Time();
   char str_dt[16];
   char str_y[3];
@@ -140,6 +149,11 @@ void get_str_datetime(){
 }
 
 void updatePage(){
+  //TODO
+    //Maybe one function per page for brevity
+    //will also allow special code paths to be implented
+    //move the screen printing into its own function. 
+    //point (dont copy) to the char*
 //string representation of the floats
   char str_temp_db[16];
   char str_temp_wb[6];
